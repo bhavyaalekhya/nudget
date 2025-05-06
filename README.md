@@ -56,7 +56,10 @@ cp frontend/.env.example frontend/.env
 ### 4. Setup the Database
 ```bash
 cd backend
+
 npx prisma db push
+
+npx prisma generate
 ```
 
 ### 5. Run in Dev Mode
