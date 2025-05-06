@@ -32,7 +32,7 @@ A cross-platform desktop application for tracking monthly income and expenses wi
 
 ```bash
 git clone https://github.com/bhavyaalekhya/nudget.git
-cd expense-tracker
+cd nudget
 ```
 
 ### 2. Install Dependencies
