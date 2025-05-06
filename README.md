@@ -45,19 +45,20 @@ cd ../backend
 npm install
 ```
 
-### 3. Setup the Database
-```bash
-cd backend
-npx prisma db push
-```
-
-### 4. Environment Setup
+### 3. Environment Setup
 Create `.env` files in `backend/` and `frontend/` respectively based on the `.env.example` files in both directories.
 ```bash
 cp backend/.env.example backend/.env
 
 cp frontend/.env.example frontend/.env
 ```
+
+### 4. Setup the Database
+```bash
+cd backend
+npx prisma db push
+```
+
 ### 5. Run in Dev Mode
 From the project root directory:
 ```bash
