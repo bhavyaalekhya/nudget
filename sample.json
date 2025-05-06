@@ -1,0 +1,14 @@
+[
+  {
+    "date": "04/01/2025",
+    "amount": 10,
+    "payment": "debit card",
+    "category": "groceries"
+  },
+  {
+    "date": "04/02/2025",
+    "amount": 10,
+    "payment": "debit card",
+    "category": "groceries"
+  }
+]
