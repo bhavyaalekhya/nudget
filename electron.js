@@ -39,9 +39,9 @@ app.whenReady().then(async () => {
     });
 
     try {
-      console.log('⏳ Waiting for frontend to be ready...');
+      console.log('Waiting for frontend to be ready...');
       await waitOn({ resources: ['http://localhost:3000'], timeout: 30000 });
-      console.log('✅ Frontend is ready.');
+      console.log('Frontend is ready.');
       createWindow();
     } catch (err) {
       console.error('Frontend did not start in time:', err);
