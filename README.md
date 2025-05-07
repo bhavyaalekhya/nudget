@@ -38,34 +38,24 @@ cd nudget
 ### 2. Install Dependencies
 
 ```bash
-npm install 
-
-cd frontend
-npm install
-
-cd ../backend
-npm install
+./scripts/dependencies.sh
 ```
 
 ### 3. Environment Setup
 Create `.env` files in `backend/` and `frontend/` respectively based on the `.env.example` files in both directories.
 ```bash
-cp backend/.env.example backend/.env
-
-cp frontend/.env.example frontend/.env
+./scripts/environments.sh
 ```
 
 ### 4. Setup the Database
 ```bash
-cd backend
-npx prisma generate
-npx prisma db push
+./scripts/database.sh
 ```
 
 ### 5. Run in Dev Mode
 From the project root directory:
 ```bash
-npm run dev
+./scripts/dev.sh
 ```
 This will:
 - Start the front end `localhost:3000`.
@@ -73,12 +63,20 @@ This will:
 - Launch the Electron window with live reload
 
 ### 6. Build for Production
-```bash
-cd frontend
-npm run build
 
-cd ..
-npm run start
+#### a. Build the application (frontend + backend)
+```bash
+./scripts/prod.sh
+```
+
+#### b. Package for macOS
+```bash
+./scripts/package-mac.sh
+```
+
+#### c. Package for Windows
+```bash
+./scripts/package-win.sh
 ```
 
 ---
