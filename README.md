@@ -38,6 +38,8 @@ cd nudget
 ### 2. Install Dependencies
 
 ```bash
+npm install 
+
 cd frontend
 npm install
 
@@ -56,10 +58,8 @@ cp frontend/.env.example frontend/.env
 ### 4. Setup the Database
 ```bash
 cd backend
-
-npx prisma db push
-
 npx prisma generate
+npx prisma db push
 ```
 
 ### 5. Run in Dev Mode
