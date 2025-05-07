@@ -64,3 +64,4 @@ release/
 .vscode/
 .idea/
 *.sw?
+/backend/prisma/prisma/

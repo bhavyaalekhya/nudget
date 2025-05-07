@@ -36,15 +36,20 @@ cd nudget
 ```
 
 ### 2. Install Dependencies
-
+Installs dependencies for `Electron`, `frontend`, and `backend`.
 ```bash
 ./scripts/dependencies.sh
 ```
 
 ### 3. Environment Setup
-Create `.env` files in `backend/` and `frontend/` respectively based on the `.env.example` files in both directories.
+Use the shared script to create synchronized `.env` files for both frontend and backend:
 ```bash
 ./scripts/environments.sh
+```
+
+Else, run the following to generate the `.env` files:
+```bash
+./scripts/setup.sh
 ```
 
 ### 4. Setup the Database
