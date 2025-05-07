@@ -3,6 +3,7 @@
   "main": "electron.js",
   "scripts": {
     "dev": "electron .",
+    "start:dev": "electron --force-node-api-uncaught-exceptions-policy=true .",
     "build": "cd frontend && npm run build && cd ../backend && npm run build",
     "start": "electron ."
   },

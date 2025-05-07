@@ -4,6 +4,9 @@ const { spawn } = require('child_process');
 const waitOn = require('wait-on');
 
 const isDev = !app.isPackaged;
+if (isDev) {
+  app.commandLine.appendSwitch('ignore-certificate-errors', 'true');
+}
 
 async function createWindow() {
   console.log('Creating Electron window...');
