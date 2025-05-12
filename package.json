@@ -13,7 +13,7 @@
       "output": "dist"
     },
     "files": [
-      "electron.js",
+      "main.js",
       "frontend/out/**",
       "backend/**",
       "node_modules/**",
