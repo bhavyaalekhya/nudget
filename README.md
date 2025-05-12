@@ -96,7 +96,7 @@ This will:
 │   └── prisma/
 │       └── schema.prisma
 │
-├── electron.js      # Electron main process
+├── main.js      # Electron main process
 ├── package.json     # Root scripts for dev/start
 └── README.md
 ```
