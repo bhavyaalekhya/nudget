@@ -5,6 +5,7 @@ import AddExp from "@/app/components/addexp";
 import CurrMonth from "@/app/components/currmonth";
 import Charts from "@/app/components/charts";
 import SummaryPanel from "@/app/components/summarypanel";
+import SpendingForecast from "@/app/components/spendingForecast";
 
 export default function Dashboard() {
   const [toast, setToast] = useState<{ message: string, type: 'success' | 'error' } | null>(null);
@@ -66,6 +67,7 @@ export default function Dashboard() {
           {/* Right Section: Charts */}
           {/* Charts column (3rd column) */}
           <div className="w-full lg:w-1/2 space-y-6">
+            <SpendingForecast />
             <SummaryPanel refreshFlag={refreshFlag} budgetLimit={1000}/>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
