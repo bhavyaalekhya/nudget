@@ -11,8 +11,10 @@ const PORT = process.env.PORT || 5050;
 
 app.use(cors());
 app.use(express.json());
+console.log('✅ Mounting /api/prediction');
+app.use('/api/prediction', predictionRoutes);
 app.use('/api/transactions', transactionRoutes);
-app.use('/api/predictions', predictionRoutes);
+
 
 app.listen(PORT, () => {
   console.log(`🚀 Server is running at http://localhost:${PORT}`);

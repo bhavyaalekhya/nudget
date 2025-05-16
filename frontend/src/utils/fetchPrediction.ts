@@ -7,7 +7,7 @@ export type PredictionResponse = {
 };
 
 export async function fetchPrediction(): Promise<PredictionResponse> {
-  const res = await fetch('http://localhost:5050/api/predictions');
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/prediction`, { method: "GET"});
 
   if (!res.ok) {
     throw new Error('Failed to fetch prediction');
