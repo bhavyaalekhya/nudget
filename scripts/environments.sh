@@ -1,6 +1,0 @@
-#!/bin/bash
-set -e
-
-echo "---Building front end and back end environments---"
-cd backend
-node create-env.js

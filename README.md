@@ -11,6 +11,7 @@ A cross-platform desktop application for tracking monthly income and expenses wi
 - Pie and Polar charts for insights
 - Budget progress bar and totals
 - Dynamic payment modes and categories
+- Dynamic pacing estimate for current month estimate
 - Built-in SQLite database (local and private)
 - Exported as a desktop app using Electron
 
@@ -38,29 +39,45 @@ cd nudget
 ### 2. Install Dependencies
 Installs dependencies for `Electron`, `frontend`, and `backend`.
 ```bash
-./scripts/dependencies.sh
+cd frontend
+npm install
+
+cd .. && cd backend
+npm install
+
+cd ..
+npm install
 ```
 
 ### 3. Environment Setup
 Use the shared script to create synchronized `.env` files for both frontend and backend:
 ```bash
-./scripts/environments.sh
+echo "---Building front end and back end environments---"
+cd backend
+node create-env.js
 ```
 
 Else, run the following to generate the `.env` files:
 ```bash
-./scripts/setup.sh
+echo "---Building front end and back end environments---"
+cp backend/.env.example backend/.env
+
+cp frontend/.env.example frontend/.env
 ```
 
 ### 4. Setup the Database
 ```bash
-./scripts/database.sh
+echo "----Setting up database----"
+cd backend
+npx prisma generate
+npx prisma db push
 ```
 
 ### 5. Run in Dev Mode
 From the project root directory:
 ```bash
-./scripts/dev.sh
+echo "---Setting up Dev mode---"
+npm run dev
 ```
 This will:
 - Start the front end `localhost:3000`.
@@ -68,20 +85,18 @@ This will:
 - Launch the Electron window with live reload
 
 ### 6. Build for Production
-
-#### a. Build the application (frontend + backend)
 ```bash
-./scripts/prod.sh
-```
+echo "---Building backend---"
+cd backend
+npm run dev
 
-#### b. Package for macOS
-```bash
-./scripts/package-mac.sh
-```
+echo "---Building frontend---"
+cd frontend
+npm run build
 
-#### c. Package for Windows
-```bash
-./scripts/package-win.sh
+echo "---Starting electron---"
+cd ..
+npm run start
 ```
 
 ---
