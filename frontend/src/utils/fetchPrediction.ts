@@ -1,8 +1,9 @@
 export type PredictionResponse = {
   predictedTotal: number;
-  lastMonthTotal: number;
+  previousMonthTotal: number;
   percentageChange: number;
   pacingEstimate: number;
+  predictedChange: number;
   cached: boolean;
 };
 

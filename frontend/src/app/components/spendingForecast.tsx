@@ -16,21 +16,29 @@ export default function SpendingForecast() {
   if (error) return <p className="text-red-500">Error: {error}</p>;
   if (!data) return <p>Loading...</p>;
 
-  const { predictedTotal, lastMonthTotal, percentageChange, pacingEstimate } = data;
+  const {
+    predictedTotal = 0,
+    previousMonthTotal = 0,
+    percentageChange = 0,
+    pacingEstimate = 0,
+    predictedChange = 0,
+  } = data;
+
+  {console.log(predictedChange);}
 
   return (
     <div className="p-4 rounded-xl bg-white shadow space-y-2">
       <h2 className="text-lg font-bold">Spending Forecast</h2>
       <p>
-        📈 At your current pace, you&aposre projected to spend{' '}
+        At your current pace, you're projected to spend{' '}
         <strong>${pacingEstimate.toFixed(2)}</strong> this month.
       </p>
-      <p>
-        🤖 Our model predicts a total of{' '}
-        <strong>${predictedTotal.toFixed(2)}</strong>, which is{' '}
-        <strong>{Math.abs(percentageChange).toFixed(1)}%</strong>{' '}
-        {percentageChange > 0 ? 'more' : 'less'} than last month (${lastMonthTotal.toFixed(2)}).
-      </p>
+      {/*<p>*/}
+      {/*  Our model predicts a total of{' '}*/}
+      {/*  <strong>${predictedTotal.toFixed(2)}</strong>, which is{' '}*/}
+      {/*  <strong>{Math.abs(predictedChange).toFixed(1)}%</strong>{' '}*/}
+      {/*  {predictedChange > 0 ? 'more' : 'less'} than last month (${previousMonthTotal.toFixed(2)}).*/}
+      {/*</p>*/}
     </div>
   );
 }

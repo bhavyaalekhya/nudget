@@ -8,6 +8,7 @@ out/
 .nyc_output/
 coverage/
 build/
+package-lock.json
 
 # -------------------------
 # Environment

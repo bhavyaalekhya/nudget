@@ -130,7 +130,7 @@ export default function Charts({ refreshFlag, type }: ChartsProps) {
     <div className="p-4">
       {type === 'payment' && paymentData && (
         <>
-          <h3 className="text-lg font-semibold text-center mb-4">Payment Method Distribution</h3>
+          <h3 className="text-lg font-semibold text-center mb-4">Payment Method</h3>
           <Pie data={paymentData} />
         </>
       )}

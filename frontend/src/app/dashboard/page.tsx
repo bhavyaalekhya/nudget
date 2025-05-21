@@ -68,7 +68,7 @@ export default function Dashboard() {
           {/* Charts column (3rd column) */}
           <div className="w-full lg:w-1/2 space-y-6">
             <SpendingForecast />
-            <SummaryPanel refreshFlag={refreshFlag} budgetLimit={1000}/>
+            <SummaryPanel refreshFlag={refreshFlag}/>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Charts type="payment" refreshFlag={refreshFlag}/>
