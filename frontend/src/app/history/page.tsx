@@ -2,10 +2,12 @@
 import { useEffect, useState } from "react";
 import Navbar from "@/app/components/navbar";
 import PrevMonth from "@/app/components/prevmonth";
+import { useTheme } from "@/app/context/themecontext";
 
 export default function History() {
   const [selectMonth, setSelectMonth] = useState('');
   const [availableMonths, setAvailableMonths] = useState<string[]>([]);
+  const { theme } = useTheme();
 
   useEffect(() => {
   const fetchMonths = async () => {
@@ -34,8 +36,16 @@ export default function History() {
   };
 
   return (
-    <div className="bg-[#D9E4DD] min-h-screen font-[family-name:var(--font-poppins)] text-black">
-      <Navbar />
+      <div
+          className="min-h-screen"
+          style={{
+            backgroundColor: theme.backgroundColor,
+            color: theme.textColor,
+            fontFamily: theme.fontFamily,
+            transition: 'all 0.3s ease'
+          }}
+      >
+        <Navbar/>
       <div className="px-4 py-16 max-w-7xl mx-auto">
         <h2 className="text-3xl text-center font-semibold mb-4">Expense History</h2>
 

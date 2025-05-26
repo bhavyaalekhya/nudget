@@ -2,6 +2,7 @@
 
 import { ChangeEvent, useEffect, useState } from 'react';
 import { Transaction } from '@/types/trans';
+import { useTheme } from '@/app/context/themecontext';
 
 type Props = {
   refreshFlag: boolean;
@@ -9,6 +10,7 @@ type Props = {
 };
 
 export default function SummaryPanel({ refreshFlag, budgetLimit }: Props) {
+  const { theme } = useTheme();
   const [totals, setTotals] = useState({ income: 0, expenses: 0 });
   const [budget, setBudget] = useState<number | undefined>();
   const [editingBudget, setEditingBudget] = useState(false);
@@ -60,20 +62,32 @@ export default function SummaryPanel({ refreshFlag, budgetLimit }: Props) {
   const usagePercent = (totals.expenses / activeBudget) * 100;
 
   const getProgressColor = () => {
-    if (usagePercent < 70) return '#7FAF7C';
-    if (usagePercent < 90) return '#D3B86A';
-    return '#C28585';
+    if (usagePercent < 70) return '#7FAF7C'; // green
+    if (usagePercent < 90) return '#D3B86A'; // yellow
+    return '#C28585'; // red
   };
 
   return (
-    <div className="bg-white p-4 rounded-xl shadow text-center space-y-4">
+    <div
+      className="p-4 rounded-xl shadow text-center space-y-4"
+      style={{
+        backgroundColor: theme.cardColor,
+        color: theme.textColor,
+        fontFamily: theme.fontFamily,
+        transition: 'all 0.3s ease',
+      }}
+    >
       {/* Header and Modify Button */}
       <div>
-        <div className="flex justify-between text-sm font-medium text-gray-600 mb-1">
+        <div className="flex justify-between text-sm font-medium mb-1" style={{ color: theme.textColor }}>
           <span>Monthly Budget Usage</span>
           <button
             onClick={() => setEditingBudget(prev => !prev)}
-            className="bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700 text-xs"
+            style={{
+              backgroundColor: theme.primaryColor,
+              color: '#fff',
+            }}
+            className="px-4 py-1 rounded hover:opacity-80 text-xs transition"
           >
             + Modify Budget
           </button>
@@ -105,7 +119,7 @@ export default function SummaryPanel({ refreshFlag, budgetLimit }: Props) {
             }}
           />
         </div>
-        <div className="text-sm text-gray-600 mt-1 text-left">
+        <div className="text-sm mt-1 text-left" style={{ color: theme.textColor }}>
           {usagePercent.toFixed(1)}% of ${activeBudget} used
         </div>
       </div>
@@ -113,14 +127,14 @@ export default function SummaryPanel({ refreshFlag, budgetLimit }: Props) {
       {/* Totals */}
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <div className="font-medium text-black">Total Income</div>
-          <div className="text-[#7FAF7C] text-2xl font-bold mt-1">
+          <div className="font-medium" style={{ color: theme.textColor }}>Total Income</div>
+          <div className="text-2xl font-bold mt-1" style={{ color: '#7FAF7C' }}>
             ${totals.income.toFixed(2)}
           </div>
         </div>
         <div>
-          <div className="font-medium text-black">Total Expenses</div>
-          <div className="text-[#C28585] text-2xl font-bold mt-1">
+          <div className="font-medium" style={{ color: theme.textColor }}>Total Expenses</div>
+          <div className="text-2xl font-bold mt-1" style={{ color: '#C28585' }}>
             ${totals.expenses.toFixed(2)}
           </div>
         </div>

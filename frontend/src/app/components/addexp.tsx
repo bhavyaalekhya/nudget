@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from "react";
+import { useTheme } from "@/app/context/themecontext";
 
 type AddExpProps = {
   onFeedbackAction: (message: string, type: 'success' | 'error') => void;
@@ -8,6 +9,7 @@ type AddExpProps = {
 };
 
 export default function AddExp({ onFeedbackAction, onExpenseAddedAction }: AddExpProps) {
+  const { theme } = useTheme();
   const [form, setForm] = useState({
     currDate: "",
     exp: "",
@@ -89,7 +91,12 @@ export default function AddExp({ onFeedbackAction, onExpenseAddedAction }: AddEx
   }, []);
 
   return (
-    <div className="bg-[#F6F8F5] shadow font-[family-name:var(--font-poppins)] text-black rounded-[12px] max-w-md">
+    <div className="shadow rounded-[12px] max-w-md"
+         style={{ backgroundColor: theme.cardColor,
+         color: theme.textColor,
+         fontFamily: theme.fontFamily,
+         transition: 'all 0.3s ease',
+         }}>
       <div className="flex flex-col items-center justify-between font-bold text-[26px]">Add</div>
       <div className="p-6 h-[85%] flex items-start justify-center">
         <form onSubmit={handleSubmit} className="w-full space-y-4 text-[18px]">

@@ -2,10 +2,12 @@
 
 import { useEffect, useState } from 'react';
 import { fetchPrediction, PredictionResponse } from '@/utils/fetchPrediction';
+import { useTheme } from '@/app/context/themecontext';
 
 export default function SpendingForecast() {
   const [data, setData] = useState<PredictionResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const { theme} = useTheme();
 
   useEffect(() => {
     fetchPrediction()
@@ -17,9 +19,9 @@ export default function SpendingForecast() {
   if (!data) return <p>Loading...</p>;
 
   const {
-    predictedTotal = 0,
-    previousMonthTotal = 0,
-    percentageChange = 0,
+    // predictedTotal = 0,
+    // previousMonthTotal = 0,
+    // percentageChange = 0,
     pacingEstimate = 0,
     predictedChange = 0,
   } = data;
@@ -27,7 +29,7 @@ export default function SpendingForecast() {
   {console.log(predictedChange);}
 
   return (
-    <div className="p-4 rounded-xl bg-white shadow space-y-2">
+    <div className="p-4 rounded-xl shadow space-y-2" style={{ backgroundColor: theme.cardColor }}>
       <h2 className="text-lg font-bold">Spending Forecast</h2>
       <p>
         At your current pace, you're projected to spend{' '}

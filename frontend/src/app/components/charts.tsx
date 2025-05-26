@@ -10,12 +10,13 @@ import {
   ArcElement,
   Tooltip,
   Legend,
-    Filler,
+  Filler,
   ChartData,
 } from 'chart.js';
-import {PolarArea, Pie} from 'react-chartjs-2';
+import { PolarArea, Pie } from 'react-chartjs-2';
 import { useEffect, useState } from 'react';
-import { Transaction } from "@/types/trans";
+import { Transaction } from '@/types/trans';
+import { useTheme } from '@/app/context/themecontext';
 
 ChartJS.register(
   CategoryScale,
@@ -26,17 +27,18 @@ ChartJS.register(
   ArcElement,
   Tooltip,
   Legend,
-    Filler
+  Filler
 );
 
 type ChartsProps = {
   refreshFlag: boolean;
-  type: 'payment' | 'category'; // Specify which chart to show
+  type: 'payment' | 'category';
 };
 
 export default function Charts({ refreshFlag, type }: ChartsProps) {
   const [paymentData, setPaymentData] = useState<ChartData<'pie'> | null>(null);
   const [categoryData, setCategoryData] = useState<ChartData<'polarArea'> | null>(null);
+  const { theme } = useTheme(); // ✅ Access theme for dynamic chartColors
 
   const normalizePayment = (raw: string = ''): string => {
     const val = raw.trim().toLowerCase();
@@ -55,23 +57,11 @@ export default function Charts({ refreshFlag, type }: ChartsProps) {
     },
   };
 
-  const basePaymentColors: Record<string, string> = {
-      debit: '#A66C91',
-      chasecredit: '#B08CCC',
-      applecredit: '#F3A99F',
-      cash: '#FDD49E',
-    };
-
-    const fallbackColors = [
-      '#D3D3D3', '#A1C6EA', '#FFC5C5', '#C1E1C1', '#F4B183',
-      '#B3A1C6', '#F6E2B3', '#B4D2BA', '#F6B5B5', '#CABBE9',
-    ];
-
   useEffect(() => {
     const fetchData = async () => {
       try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/transactions`);
-        if (!res.ok) throw new Error("Failed to fetch transactions");
+        if (!res.ok) throw new Error('Failed to fetch transactions');
 
         const { expenses } = await res.json();
         const currMonthKey = new Date().toISOString().slice(0, 7);
@@ -91,40 +81,40 @@ export default function Charts({ refreshFlag, type }: ChartsProps) {
         }
 
         const paymentLabels = Object.keys(payments);
+        const categoryLabels = Object.keys(categories);
+
         setPaymentData({
           labels: paymentLabels,
           datasets: [
             {
               label: 'By Payment Method',
               data: Object.values(payments),
-              backgroundColor: paymentLabels.map((p, i) => {
-                const key = p.toLowerCase();
-                return basePaymentColors[key] || fallbackColors[i % fallbackColors.length];
-              }),
+              backgroundColor: paymentLabels.map(
+                (_, i) => theme.chartColorsPayment[i % theme.chartColorsPayment.length]
+              ),
             },
           ],
         });
 
-        const categoryLabels = Object.keys(categories);
         setCategoryData({
           labels: categoryLabels,
           datasets: [
             {
               label: 'By Category',
               data: Object.values(categories),
-              backgroundColor: [
-                '#FC9272', '#9E9AC8', '#66C2A5', '#FDD49E', '#A6BDDB', '#BCBCBC',
-              ],
+              backgroundColor: categoryLabels.map(
+                (_, i) => theme.chartColorsCategory[i % theme.chartColorsCategory.length]
+              ),
             },
           ],
         });
       } catch (err) {
-        console.error("Chart data fetch error:", err);
+        console.error('Chart data fetch error:', err);
       }
     };
 
     fetchData();
-  }, [refreshFlag]);
+  }, [refreshFlag, theme.chartColorsCategory, theme.chartColorsPayment]);
 
   return (
     <div className="p-4">
