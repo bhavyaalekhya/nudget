@@ -18,7 +18,9 @@ const Button: React.FC<ButtonProps> = ({ lbl, click }) => {
         color: theme.textColor,
         fontFamily: theme.fontFamily,
       }}
-      className="px-6 py-3 rounded-sm hover:opacity-80 transition"
+      onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = theme.secondaryColor)}
+      onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = theme.primaryColor)}
+      className="px-6 py-3 rounded-sm transition"
     >
       {lbl}
     </button>
