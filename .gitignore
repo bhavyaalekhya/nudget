@@ -9,6 +9,7 @@ out/
 coverage/
 build/
 package-lock.json
+todo.txt
 
 # -------------------------
 # Environment
