@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
 import { PrismaClient } from '../../generated/prisma';
-import { predictNextMonth } from '../utils/predictSpending';
+//import { predictNextMonth } from '../utils/predictSpending';
 
 const prisma = new PrismaClient();
 const router = Router();
@@ -40,12 +40,12 @@ router.get('/', async (req: Request, res: Response): Promise<any> => {
     const previousMonthTotal = validTotals[validTotals.length - 2];
     console.log(previousMonthTotal); // most recent completed
 
-    const predictedTotal = await predictNextMonth(completedMonths);
+    //const predictedTotal = await predictNextMonth(completedMonths);
 
     // Guard against divide-by-zero
-    const percentageChange = previousMonthTotal > 0
-      ? ((predictedTotal - previousMonthTotal) / previousMonthTotal) * 100
-      : 0;
+    // const percentageChange = previousMonthTotal > 0
+    //   ? ((predictedTotal - previousMonthTotal) / previousMonthTotal) * 100
+    //   : 0;
 
     // Get current month spend
     const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
@@ -73,9 +73,9 @@ router.get('/', async (req: Request, res: Response): Promise<any> => {
       : 0;
 
     const response = {
-      predictedTotal: parseFloat((predictedTotal ?? 0).toFixed(2)),
+      predictedTotal: 0,
       previousMonthTotal: parseFloat((previousMonthTotal ?? 0).toFixed(2)),
-      percentageChange: parseFloat((percentageChange ?? 0).toFixed(1)),
+      percentageChange: 0,
       pacingEstimate: parseFloat((pacingEstimate ?? 0).toFixed(2)),
       predictedChange: parseFloat((predictedChange ?? 0).toFixed(2)),
     };

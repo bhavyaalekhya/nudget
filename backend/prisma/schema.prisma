@@ -30,3 +30,18 @@ model Income {
   category String
   date     DateTime
 }
+
+model Theme {
+  id                  Int      @id @default(autoincrement())
+  name                String   @unique
+  isActive            Boolean
+  backgroundColor     String
+  textColor           String
+  fontFamily          String?
+  cardColor           String
+  primaryColor        String
+  secondaryColor      String
+  chartColorsPayment  String
+  chartColorsCategory String
+  createdAt           DateTime @default(now())
+}

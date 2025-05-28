@@ -18,7 +18,7 @@ export const defaultTheme = {
     ],
   chartColorsCategory: [
       '#66C2A5', // teal
-      '#FC9272', // coral (moved to 2nd for contrast)
+      '#FC9272', // coral
       '#9E9AC8', // lavender
       '#FCD34D', // yellow
       '#7DD3FC', // sky
