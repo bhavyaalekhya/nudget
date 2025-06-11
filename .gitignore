@@ -66,4 +66,3 @@ release/
 .idea/
 *.sw?
 /backend/prisma/prisma/
-/ai/
