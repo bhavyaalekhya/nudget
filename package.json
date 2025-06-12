@@ -31,7 +31,8 @@
   },
   "devDependencies": {
     "electron": "^26.0.0",
-    "electron-builder": "^24.9.1"
+    "electron-builder": "^24.9.1",
+    "tsx": "^4.20.2"
   },
   "dependencies": {
     "wait-on": "^8.0.3"

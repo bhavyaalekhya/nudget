@@ -17,7 +17,7 @@ if (fs.existsSync(backendEnvPath)) {
 const PORT = existingBackendPort || DEFAULT_PORT;
 
 // Write backend .env
-const backendEnv = `PORT=${PORT}\n`;
+const backendEnv = `DATABASE_URL="file:./data/nudget.db" \nPORT=${PORT}\n`;
 fs.writeFileSync(backendEnvPath, backendEnv);
 console.log(`Created backend/.env with PORT=${PORT}`);
 

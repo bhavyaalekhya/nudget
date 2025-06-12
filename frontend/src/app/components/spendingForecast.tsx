@@ -32,7 +32,7 @@ export default function SpendingForecast() {
     <div className="p-4 rounded-xl shadow space-y-2" style={{ backgroundColor: theme.cardColor }}>
       <h2 className="text-lg font-bold">Spending Forecast</h2>
       <p>
-        At your current pace, you're projected to spend{' '}
+        At your current pace, you`&apos;`re projected to spend{' '}
         <strong>${pacingEstimate.toFixed(2)}</strong> this month.
       </p>
       {/*<p>*/}

@@ -8,6 +8,8 @@ type AddExpProps = {
   onExpenseAddedAction: () => void;
 };
 
+const HF_API_URL = "https://balekhya-nudget.hf.space";
+
 export default function AddExp({ onFeedbackAction, onExpenseAddedAction }: AddExpProps) {
   const { theme } = useTheme();
   const [form, setForm] = useState({
@@ -21,24 +23,65 @@ export default function AddExp({ onFeedbackAction, onExpenseAddedAction }: AddEx
     customPayment: ""
   });
 
+  const [availablePayments, setAvailablePayments] = useState<string[]>([]);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setForm(prev => ({ ...prev, [name]: value }));
   };
 
+  useEffect(() => {
+    const fetchPaymentModes = async () => {
+      try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/transactions/payment-modes`);
+        const data = await res.json();
+        setAvailablePayments(data.modes || []);
+      } catch (err) {
+        console.error("Failed to fetch payment modes:", err);
+      }
+    };
+
+    fetchPaymentModes();
+  }, []);
+
+  useEffect(() => {
+    const fetchCategory = async () => {
+      if (form.mode !== "expense" || !form.name) return;
+
+      try {
+        const res = await fetch(`${HF_API_URL}/categorize?description=${encodeURIComponent(form.name)}`);
+        const data = await res.json();
+        if (data?.category) {
+          setForm(prev => ({ ...prev, category: data.category }));
+        } else {
+          setForm(prev => ({ ...prev, category: "other" }));
+        }
+      } catch (err) {
+        console.error("Failed to fetch category:", err);
+        setForm(prev => ({ ...prev, category: "other" }));
+      }
+    };
+
+    fetchCategory();
+  }, [form.name, form.mode]);
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const finalCategory = form.category === "custom" ? form.customCategory : form.category;
-    let finalPayment = form.payment === "custom" ? form.customPayment : form.payment;
+    // Validation check: Required fields
+    if (!form.mode || !form.exp || !form.currDate || !form.name || !form.category) {
+      onFeedbackAction("Please fill in all required fields.", "error");
+      return;
+    }
 
-    finalPayment = finalPayment.replace(/\s+/g, '');
+    const finalPayment =
+      (form.payment === "custom" ? form.customPayment : form.payment).replace(/\s+/g, '') || "unknown";
 
     const payload = {
       mode: form.mode,
       name: form.name.trim().toLowerCase() || "untitled",
       amount: parseFloat(form.exp),
-      category: finalCategory.toLowerCase(),
+      category: form.category.toLowerCase() || "other",
       date: form.currDate,
       payment: finalPayment.toLowerCase(),
     };
@@ -74,34 +117,19 @@ export default function AddExp({ onFeedbackAction, onExpenseAddedAction }: AddEx
     }
   };
 
-  const [availablePayments, setAvailablePayments] = useState<string[]>([]);
-
-  useEffect(() => {
-    const fetchPaymentModes = async () => {
-      try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/transactions/payment-modes`);
-        const data = await res.json();
-        setAvailablePayments(data.modes || []);
-      } catch (err) {
-        console.error("Failed to fetch payment modes:", err);
-      }
-    };
-
-    fetchPaymentModes();
-  }, []);
 
   return (
     <div className="shadow rounded-[12px] max-w-md"
-         style={{ backgroundColor: theme.cardColor,
-         color: theme.textColor,
-         fontFamily: theme.fontFamily,
-         transition: 'all 0.3s ease',
+         style={{
+           backgroundColor: theme.cardColor,
+           color: theme.textColor,
+           fontFamily: theme.fontFamily,
+           transition: 'all 0.3s ease',
          }}>
       <div className="flex flex-col items-center justify-between font-bold text-[26px]">Add</div>
       <div className="p-6 h-[85%] flex items-start justify-center">
         <form onSubmit={handleSubmit} className="w-full space-y-4 text-[18px]">
 
-          {/* Type */}
           <div>
             <label>Type</label>
             <select name="mode" value={form.mode} onChange={handleChange} className="w-full p-2 rounded-md border border-gray-300 mt-1">
@@ -111,116 +139,92 @@ export default function AddExp({ onFeedbackAction, onExpenseAddedAction }: AddEx
             </select>
           </div>
 
-          {/* Date */}
           <div>
             <label>Date</label>
-            <input
-              type="date"
-              name="currDate"
-              value={form.currDate}
-              onChange={handleChange}
-              className="w-full p-2 rounded-md border border-gray-300 mt-1"
-            />
+            <input type="date" name="currDate" value={form.currDate} onChange={handleChange}
+                   className="w-full p-2 rounded-md border border-gray-300 mt-1" />
           </div>
 
-          {/* Amount */}
           <div>
             <label>Amount</label>
-            <input
-              type="number"
-              name="exp"
-              value={form.exp}
-              onChange={handleChange}
-              className="w-full p-2 rounded-md border border-gray-300 mt-1"
-              placeholder="e.g., 50"
-            />
+            <input type="number" name="exp" value={form.exp} onChange={handleChange}
+                   className="w-full p-2 rounded-md border border-gray-300 mt-1" placeholder="e.g., 50" />
           </div>
 
-          {/* Payment (Only for Expense) */}
           {form.mode === "expense" && (
-              <div>
-                <label>Name</label>
-                <input
-                    type="text"
-                    name="name"
-                    value={form.name}
-                    onChange={handleChange}
-                    className="w-full p-2 rounded-md border border-gray-300 mt-1"
-                    placeholder="e.g., Groceries"
-                />
+            <div>
+              <label>Name</label>
+              <input type="text" name="name" value={form.name} onChange={handleChange}
+                     className="w-full p-2 rounded-md border border-gray-300 mt-1" placeholder="e.g., Groceries" />
 
-                <label>Payment</label>
-                <select name="payment" value={form.payment} onChange={handleChange}
-                        className="w-full p-2 rounded-md border border-gray-300 mt-1">
-                  <option value="">Select Payment</option>
-                  {availablePayments.map((p) => (
-                    <option key={p} value={p}>
-                      {p.charAt(0).toUpperCase() + p.slice(1)}
-                    </option>
-                  ))}
-                  <option value="custom">+ Add New Payment</option>
-                </select>
-              </div>
+              <label>Payment</label>
+              <select name="payment" value={form.payment} onChange={handleChange}
+                      className="w-full p-2 rounded-md border border-gray-300 mt-1">
+                <option value="">Select Payment</option>
+                {availablePayments.map((p) => (
+                  <option key={p} value={p}>
+                    {p.charAt(0).toUpperCase() + p.slice(1)}
+                  </option>
+                ))}
+                <option value="custom">+ Add New Payment</option>
+              </select>
+            </div>
           )}
 
           {form.payment === "custom" && (
             <div>
               <label>New Payment</label>
-              <input
-                type="text"
-                name="customPayment"
-                value={form.customPayment}
-                onChange={handleChange}
-                className="w-full p-2 rounded-md border border-gray-300 mt-1"
-                placeholder="Enter new payment"
-              />
+              <input type="text" name="customPayment" value={form.customPayment} onChange={handleChange}
+                     className="w-full p-2 rounded-md border border-gray-300 mt-1" placeholder="Enter new payment" />
             </div>
           )}
 
-          {/* Category */}
-          <div>
-            <label>Category</label>
-            <select name="category" value={form.category} onChange={handleChange}
-                    className="w-full p-2 rounded-md border border-gray-300 mt-1">
-              <option value="">Select Category</option>
-              {form.mode === "expense" && (
-                <>
-                  <option value="food">Food</option>
-                  <option value="transport">Transport</option>
-                  <option value="shopping">Shopping</option>
-                  <option value="utilities">Utilities</option>
-                </>
-              )}
-              {form.mode === "income" && (
-                <>
-                  <option value="salary">Salary</option>
-                  <option value="freelance">Freelance</option>
-                  <option value="bonus">Bonus</option>
-                </>
-              )}
-              <option value="custom">+ Add New Category</option>
-            </select>
-          </div>
+          {/*<div>*/}
+          {/*  <label>Category</label>*/}
+          {/*  <select name="category" value={form.category} onChange={handleChange}*/}
+          {/*          className="w-full p-2 rounded-md border border-gray-300 mt-1">*/}
+          {/*    <option value="">Select Category</option>*/}
+          {/*    {form.mode === "expense" && (*/}
+          {/*      <>*/}
+          {/*        <option value="food">Food</option>*/}
+          {/*        <option value="transport">Transport</option>*/}
+          {/*        <option value="shopping">Shopping</option>*/}
+          {/*        <option value="utilities">Utilities</option>*/}
+          {/*      </>*/}
+          {/*    )}*/}
+          {/*    {form.mode === "income" && (*/}
+          {/*      <>*/}
+          {/*        <option value="salary">Salary</option>*/}
+          {/*        <option value="freelance">Freelance</option>*/}
+          {/*        <option value="bonus">Bonus</option>*/}
+          {/*      </>*/}
+          {/*    )}*/}
+          {/*    <option value="custom">+ Add New Category</option>*/}
+          {/*  </select>*/}
+          {/*</div>*/}
 
-          {/* Custom Category */}
-          {form.category === "custom" && (
+          {/*{form.category === "custom" && (*/}
+          {/*  <div>*/}
+          {/*    <label>New Category</label>*/}
+          {/*    <input type="text" name="customCategory" value={form.customCategory} onChange={handleChange}*/}
+          {/*           className="w-full p-2 rounded-md border border-gray-300 mt-1" placeholder="Enter new category" />*/}
+          {/*  </div>*/}
+          {/*)}*/}
+
+          {form.mode === "expense" && form.category && (
             <div>
-              <label>New Category</label>
+              <label>Predicted Category</label>
               <input
                 type="text"
-                name="customCategory"
-                value={form.customCategory}
-                onChange={handleChange}
-                className="w-full p-2 rounded-md border border-gray-300 mt-1"
-                placeholder="Enter new category"
+                value={form.category}
+                readOnly
+                className="w-full p-2 rounded-md border border-gray-300 mt-1 bg-gray-100 text-gray-600"
               />
             </div>
           )}
 
-          <button
-            type="submit"
-            className="w-full bg-[#9CB89D] text-black py-2 rounded-md hover:bg-[#7ea185] transition font-semibold mt-4"
-          >
+          <button type="submit"
+                  className="w-full bg-[#9CB89D] text-black py-2 rounded-md hover:bg-[#7ea185] transition font-semibold mt-4">
             Add {form.mode === "income" ? "Income" : "Expense"}
           </button>
         </form>
